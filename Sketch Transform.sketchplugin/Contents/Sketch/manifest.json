@@ -1,0 +1,21 @@
+{
+	"name": "Sketch Transform",
+	"description": "A collection of transformation tools useful for generating mockups of charts",
+	"author": "W. Evan Sheehan",
+	"version": "0.1-beta",
+	"identifier": "net.darthmall.sketch.sketch-transform",
+	"commands": [
+		{
+			"name": "Split into grid",
+			"identifier": "transform-split",
+			"script": "split.cocoascript",
+		}
+	],
+	"menu": {
+		"title": "Transform",
+		"isRoot": false,
+		"items": [
+			"transform-split"
+		]
+	}
+}

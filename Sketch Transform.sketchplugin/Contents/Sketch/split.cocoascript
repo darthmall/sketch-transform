@@ -1,0 +1,4 @@
+var onRun = function (context) {
+	var doc = context.document
+	var name = doc.askForUserInput_initialValue("What is your name?", "")
+}
