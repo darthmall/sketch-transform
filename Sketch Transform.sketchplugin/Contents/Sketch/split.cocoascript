@@ -37,8 +37,6 @@ function onRun(context) {
 	var rows = parseInt([[alert viewAtIndex: 3] stringValue]);
 	var gutter = parseInt([[alert viewAtIndex: 5] stringValue]);
 
-	log("grid: " + cols + ", " + rows + ", " + gutter);
-
 	var layer = selection[0];
 	var frame = [layer frame];
 
