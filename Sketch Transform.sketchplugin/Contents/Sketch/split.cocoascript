@@ -24,6 +24,14 @@ function onRun(context) {
 	[alert addTextLabelWithValue: "Gutter"];
 	[alert addTextFieldWithValue: "0"];
 
+	// Dimensions cribbed from COSAlertWindow's addTextFieldWithValue method
+	var round = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, 300, 24)];
+
+	[round setButtonType: NSSwitchButton];
+	round.title = "Round to pixel";
+	round.state = NSOnState;
+	[alert addAccessoryView: round];
+
 	[alert addButtonWithTitle: "OK"];
 	[alert addButtonWithTitle: "Cancel"];
 
@@ -41,8 +49,19 @@ function onRun(context) {
 	var frame = [layer frame];
 
 	// Resize the original layer
-	[frame setWidth: ([frame width] - (cols - 1) * gutter) / cols];
-	[frame setHeight: ([frame height] - (rows - 1) * gutter) / rows];
+	var width = ([frame width] - (cols - 1) * gutter) / cols;
+	var height = ([frame height] - (rows - 1) * gutter) / rows;
+
+	if ([round state] == NSOnState) {
+		log("rounding");
+		width = Math.floor(width);
+		height = Math.floor(height);
+	} else {
+		log("not rounding " + [round state]);
+	}
+
+	[frame setWidth: width];
+	[frame setHeight: height];
 
 	// Duplicate the layer to create desired number of rows and columns
 	for (var i = 0; i < cols; i++) {
