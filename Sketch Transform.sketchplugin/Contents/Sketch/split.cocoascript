@@ -19,6 +19,10 @@ function onRun(context) {
 
 	[alert addTextLabelWithValue: "Columns"];
 	[alert addTextFieldWithValue: "1"];
+	[alert addTextLabelWithValue: "Rows"];
+	[alert addTextFieldWithValue: "1"];
+	[alert addTextLabelWithValue: "Gutter"];
+	[alert addTextFieldWithValue: "0"];
 
 	[alert addButtonWithTitle: "OK"];
 	[alert addButtonWithTitle: "Cancel"];
@@ -30,8 +34,10 @@ function onRun(context) {
 
 	// FIXME: No error handling
 	var cols = parseInt([[alert viewAtIndex: 1] stringValue]);
-	var rows = 1;
-	var gutter = 0;
+	var rows = parseInt([[alert viewAtIndex: 3] stringValue]);
+	var gutter = parseInt([[alert viewAtIndex: 5] stringValue]);
+
+	log("grid: " + cols + ", " + rows + ", " + gutter);
 
 	var layer = selection[0];
 	var frame = [layer frame];
