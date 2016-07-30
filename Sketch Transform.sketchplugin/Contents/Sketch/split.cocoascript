@@ -1,4 +1,56 @@
-var onRun = function (context) {
-	var doc = context.document
-	var name = doc.askForUserInput_initialValue("What is your name?", "")
+function onRun(context) {
+	var doc = context.document;
+	var selection = context.selection;
+
+	// Currently this only works on a single object.
+	// FIXME: These messages aren't very salient for errors
+	// FIXME: We should ensure these aren't groups or symbols, only primitive
+	// shapes
+	if (selection.count() < 1) {
+		doc.showMessage("Please select an object.");
+		return;
+	} else if (selection.count() > 1) {
+		doc.showMessage("Please select only one object.");
+		return;
+	}
+
+	var alert = [COSAlertWindow new];
+	[alert setMessageText: "Split into grid"];
+
+	[alert addTextLabelWithValue: "Columns"];
+	[alert addTextFieldWithValue: "1"];
+
+	[alert addButtonWithTitle: "OK"];
+	[alert addButtonWithTitle: "Cancel"];
+
+	var responseCode = [alert runModal];
+
+	// Cancel
+	if (responseCode == NSAlertSecondButtonReturn) return;
+
+	// FIXME: No error handling
+	var cols = parseInt([[alert viewAtIndex: 1] stringValue]);
+	var rows = 1;
+	var gutter = 0;
+
+	var layer = selection[0];
+	var frame = [layer frame];
+
+	// Resize the original layer
+	[frame setWidth: ([frame width] - (cols - 1) * gutter) / cols];
+	[frame setHeight: ([frame height] - (rows - 1) * gutter) / rows];
+
+	// Duplicate the layer to create desired number of rows and columns
+	for (var i = 0; i < cols; i++) {
+		for (var j = 0; j < rows; j++) {
+			// Don't duplicate the first cell because it's fine
+			if (i == 0 && j == 0) continue;
+
+			var dup = [layer duplicate];
+			var fup = [dup frame];
+
+			[fup setX: [frame x] + ([frame width] + gutter) * i];
+			[fup setY: [frame y] + ([frame height] + gutter) * j];
+		}
+	}
 }
