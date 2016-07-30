@@ -9,12 +9,17 @@
 			"name": "Split into grid",
 			"identifier": "transform-split",
 			"script": "split.cocoascript",
+		}, {
+			"name": "Resize each",
+			"identifier": "transform-resize",
+			"script": "resize.cocoascript"
 		}
 	],
 	"menu": {
 		"title": "Transform",
 		"isRoot": false,
 		"items": [
+			"transform-resize",
 			"transform-split"
 		]
 	}

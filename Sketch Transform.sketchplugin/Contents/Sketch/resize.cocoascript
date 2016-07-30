@@ -1,0 +1,35 @@
+function onRun(context) {
+	var doc = context.document;
+	var selection = context.selection;
+
+	if ([selection count] < 1) {
+		[doc showMessage: "Select at least one object"];
+		return;
+	}
+
+	var alert = [COSAlertWindow new];
+	[alert setMessageText: "Resize each"];
+
+	[alert addTextLabelWithValue: "Width"];
+	[alert addTextFieldWithValue: "0"];
+	[alert addTextLabelWithValue: "Height"];
+	[alert addTextFieldWithValue: "0"];
+
+	[alert addButtonWithTitle: "OK"];
+	[alert addButtonWithTitle: "Cancel"];
+
+	var responseCode = [alert runModal];
+
+	if (responseCode == NSAlertSecondButtonReturn) return;
+
+	var width = parseInt([[alert viewAtIndex: 1] stringValue]);
+	var height = parseInt([[alert viewAtIndex: 3] stringValue]);
+
+	for (var i = 0; i < selection.count(); i++) {
+		var layer = selection[i];
+		var frame = [layer frame];
+
+		[frame setWidth: [frame width] + width];
+		[frame setHeight: [frame height] + height];
+	}
+}
