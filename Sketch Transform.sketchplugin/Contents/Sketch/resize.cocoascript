@@ -15,6 +15,13 @@ function onRun(context) {
 	[alert addTextLabelWithValue: "Height"];
 	[alert addTextFieldWithValue: "0"];
 
+	// Dimensions cribbed from COSAlertWindow's addTextFieldWithValue method
+	var cumulative = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, 300, 24)];
+
+	[cumulative setButtonType: NSSwitchButton];
+	cumulative.title = "Cumulative";
+	[alert addAccessoryView: cumulative];
+
 	[alert addButtonWithTitle: "OK"];
 	[alert addButtonWithTitle: "Cancel"];
 
@@ -24,12 +31,13 @@ function onRun(context) {
 
 	var width = parseInt([[alert viewAtIndex: 1] stringValue]);
 	var height = parseInt([[alert viewAtIndex: 3] stringValue]);
+	var accumulate = [cumulative state] == NSOnState;
 
 	for (var i = 0; i < selection.count(); i++) {
 		var layer = selection[i];
 		var frame = [layer frame];
 
-		[frame setWidth: [frame width] + width];
-		[frame setHeight: [frame height] + height];
+		[frame setWidth: [frame width] + (width * (accumulate ? (i + 1) : 1))];
+		[frame setHeight: [frame height] + (height * (accumulate ? (i + 1) : 1))];
 	}
 }

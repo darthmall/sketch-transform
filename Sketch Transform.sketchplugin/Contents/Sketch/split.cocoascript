@@ -63,13 +63,21 @@ function onRun(context) {
 	[frame setWidth: width];
 	[frame setHeight: height];
 
+	var dup = layer;
+
 	// Duplicate the layer to create desired number of rows and columns
 	for (var i = 0; i < cols; i++) {
 		for (var j = 0; j < rows; j++) {
 			// Don't duplicate the first cell because it's fine
 			if (i == 0 && j == 0) continue;
 
-			var dup = [layer duplicate];
+			// Create the duplicate from the previous duplicated layer so that they
+			// are inserted into the document in order. Duplicating always inserts
+			// immediately above the original layer, so duplicating the original
+			// frame each time results in weird reverse order of the duplicates
+			// where the last inserted layer is immediately above the original,
+			// instead of being last.
+			dup = [dup duplicate];
 			var fup = [dup frame];
 
 			[fup setX: [frame x] + ([frame width] + gutter) * i];
