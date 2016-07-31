@@ -1,3 +1,5 @@
+@import "lib/noise.js";
+
 function onRun(context) {
 	var doc = context.document;
 	var selection = context.selection;
@@ -22,6 +24,19 @@ function onRun(context) {
 	cumulative.title = "Cumulative";
 	[alert addAccessoryView: cumulative];
 
+	var randomize = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, 300, 24)];
+
+	[randomize setButtonType: NSSwitchButton];
+	randomize.title = "Randomize";
+	[alert addAccessoryView: randomize];
+
+	var round = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, 300, 24)];
+
+	[round setButtonType: NSSwitchButton];
+	round.title = "Round to pixel";
+	round.state = NSOnState;
+	[alert addAccessoryView: round];
+
 	[alert addButtonWithTitle: "OK"];
 	[alert addButtonWithTitle: "Cancel"];
 
@@ -32,12 +47,21 @@ function onRun(context) {
 	var width = parseInt([[alert viewAtIndex: 1] stringValue]);
 	var height = parseInt([[alert viewAtIndex: 3] stringValue]);
 	var accumulate = [cumulative state] == NSOnState;
+	var perturb = [randomize state] == NSOnState;
 
 	for (var i = 0; i < selection.count(); i++) {
 		var layer = selection[i];
 		var frame = [layer frame];
 
-		[frame setWidth: [frame width] + (width * (accumulate ? (i + 1) : 1))];
-		[frame setHeight: [frame height] + (height * (accumulate ? (i + 1) : 1))];
+		var dw = (width * (accumulate ? (i + 1) : 1)) + (perturb ? simpleNoise(width) : 0);
+		var dh = (height * (accumulate ? (i + 1) : 1)) + (perturb ? simpleNoise(height) : 0);
+
+		if ([round state] == NSOnState) {
+			dw = Math.floor(dw);
+			dh = Math.floor(dh);
+		}
+
+		[frame setWidth: [frame width] + dw];
+		[frame setHeight: [frame height] + dh];
 	}
 }
