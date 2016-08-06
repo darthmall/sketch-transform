@@ -2,7 +2,7 @@
 	"name": "Sketch Transform",
 	"description": "A collection of transformation tools useful for generating mockups of charts",
 	"author": "W. Evan Sheehan",
-	"version": "0.1-beta",
+	"version": "0.1",
 	"identifier": "net.darthmall.sketch.sketch-transform",
 	"commands": [
 		{
